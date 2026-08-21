@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 function Services() {
   const services = [
     {
@@ -38,6 +40,31 @@ function Services() {
     },
   ];
 
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    const cards = cardsRef.current?.querySelectorAll(".card-wrapper");
+
+    if (!cards) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="services" id="services">
       <div className="section-title">
@@ -54,14 +81,20 @@ function Services() {
         </p>
       </div>
 
-      <div className="cards">
-        {services.map((service) => (
-          <div className="card" key={service.title}>
-            <div className="service-icon">{service.icon}</div>
+      <div className="cards" ref={cardsRef}>
+        {services.map((service, index) => (
+          <div
+            className="card-wrapper"
+            key={service.title}
+            style={{ "--delay": `${index * 0.12}s` }}
+          >
+            <div className="card">
+              <div className="service-icon">{service.icon}</div>
 
-            <h3>{service.title}</h3>
+              <h3>{service.title}</h3>
 
-            <p>{service.description}</p>
+              <p>{service.description}</p>
+            </div>
           </div>
         ))}
       </div>

@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Gallery() {
   const [filter, setFilter] = useState("all");
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const galleryRef = useRef(null);
 
   const corporateImages = [
     "gallery1.jpeg",
@@ -30,6 +33,32 @@ function Gallery() {
       : filter === "wedding"
       ? weddingImages
       : allImages;
+
+  useEffect(() => {
+  const items = galleryRef.current?.querySelectorAll(
+    ".gallery-item-wrapper"
+  );
+
+  if (!items) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+    }
+  );
+
+  items.forEach((item) => observer.observe(item));
+
+  return () => observer.disconnect();
+}, [filter]);
+
 
   return (
     <section className="gallery" id="gallery">
@@ -74,16 +103,46 @@ function Gallery() {
       </div>
 
       {/* GALLERY */}
-      <div className="gallery-grid">
+      <div className="gallery-grid" ref={galleryRef}>
         {images.map((image, index) => (
-          <div className="gallery-item" key={image}>
-            <img
-              src={`/${image}`}
-              alt={`AUDIOSYNC event ${index + 1}`}
-            />
+          <div
+            className="gallery-item-wrapper"
+            key={`${filter}-${image}`}
+            style={{ "--delay": `${index * 0.1}s` }}
+          >
+            <div
+              className="gallery-item"
+              onClick={() => setSelectedImage(image)}
+            >
+              <img
+                src={`/${image}`}
+                alt={`AUDIOSYNC event ${index + 1}`}
+              />
+            </div>
           </div>
         ))}
       </div>
+
+      {/* LIGHTBOX */}
+      {selectedImage && (
+        <div
+          className="lightbox"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            className="lightbox-close"
+            onClick={() => setSelectedImage(null)}
+          >
+            ✕
+          </button>
+
+          <img
+            src={`/${selectedImage}`}
+            alt="AUDIOSYNC event"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
 
     </section>
   );

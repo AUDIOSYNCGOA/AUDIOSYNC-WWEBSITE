@@ -48,11 +48,40 @@ function About() {
     { number: 500, label: "Happy Customers" },
   ];
 
+  const highlightsRef = useRef(null);
+  const aboutTextRef = useRef(null);
+
+  useEffect(() => {
+    const elements = [
+      aboutTextRef.current,
+      ...(highlightsRef.current?.querySelectorAll(".highlight-wrapper") || []),
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    elements.forEach((element) => {
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="about" id="about">
       <div className="about-content">
 
-        <div className="about-text">
+        <div className="about-text about-reveal" ref={aboutTextRef}>
           <p className="section-label">WHO WE ARE</p>
 
           <h2>
@@ -72,11 +101,17 @@ function About() {
           </p>
         </div>
 
-        <div className="about-highlights">
-          {highlights.map((item) => (
-            <div className="highlight" key={item.label}>
-              <Counter target={item.number} />
-              <span>{item.label}</span>
+        <div className="about-highlights" ref={highlightsRef}>
+          {highlights.map((item, index) => (
+            <div
+              className="highlight-wrapper"
+              key={item.label}
+              style={{ "--delay": `${index * 0.12}s` }}
+            >
+              <div className="highlight">
+                <Counter target={item.number} />
+                <span>{item.label}</span>
+              </div>
             </div>
           ))}
         </div>
