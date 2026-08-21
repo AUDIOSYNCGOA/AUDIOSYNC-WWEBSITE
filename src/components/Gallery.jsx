@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 function Gallery() {
+  const [filter, setFilter] = useState("all");
+
   const corporateImages = [
     "gallery1.jpeg",
     "gallery3.jpeg",
@@ -15,55 +19,67 @@ function Gallery() {
     "gallery10.jpeg",
   ];
 
+  const allImages = [
+    ...corporateImages,
+    ...weddingImages,
+  ];
+
+  const images =
+    filter === "corporate"
+      ? corporateImages
+      : filter === "wedding"
+      ? weddingImages
+      : allImages;
+
   return (
     <section className="gallery" id="gallery">
 
-      {/* CORPORATE WORKS */}
       <div className="section-title">
-        <p className="section-label">OUR CORPORATE WORKS</p>
+        <p className="section-label">OUR WORK</p>
 
         <h2>
-          Corporate <span>Events</span>
+          Events We've <span>Produced</span>
         </h2>
 
         <p>
-          Professional sound, lighting and production setups
-          for corporate events and celebrations.
+          A look at some of the sound, lighting and production
+          setups by AUDIOSYNC.
         </p>
       </div>
 
+      {/* FILTER BUTTONS */}
+      <div className="gallery-filters">
+
+        <button
+          className={filter === "all" ? "active" : ""}
+          onClick={() => setFilter("all")}
+        >
+          All
+        </button>
+
+        <button
+          className={filter === "corporate" ? "active" : ""}
+          onClick={() => setFilter("corporate")}
+        >
+          Corporate
+        </button>
+
+        <button
+          className={filter === "wedding" ? "active" : ""}
+          onClick={() => setFilter("wedding")}
+        >
+          Weddings
+        </button>
+
+      </div>
+
+      {/* GALLERY */}
       <div className="gallery-grid">
-        {corporateImages.map((image, index) => (
+        {images.map((image, index) => (
           <div className="gallery-item" key={image}>
             <img
               src={`/${image}`}
-              alt={`AUDIOSYNC corporate event ${index + 1}`}
-            />
-          </div>
-        ))}
-      </div>
-
-
-      {/* WEDDING WORKS */}
-      <div className="section-title gallery-section-title">
-        <p className="section-label">OUR WEDDING WORKS</p>
-
-        <h2>
-          Wedding <span>Events</span>
-        </h2>
-
-        <p>
-          Beautiful sound, lighting and production setups
-          created for weddings and celebrations.
-        </p>
-      </div>
-
-      <div className="gallery-grid">
-        {weddingImages.map((image, index) => (
-          <div className="gallery-item" key={image}>
-            <img
-              src={`/${image}`}
-              alt={`AUDIOSYNC wedding event ${index + 1}`}
+              alt={`AUDIOSYNC event ${index + 1}`}
             />
           </div>
         ))}
