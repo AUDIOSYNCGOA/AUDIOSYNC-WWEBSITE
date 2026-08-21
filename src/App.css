@@ -755,3 +755,7 @@ nav {
     background: rgba(195, 92, 255, 0.1);
   }
 }
+
+.gallery-section-title {
+  margin-top: 100px;
+}

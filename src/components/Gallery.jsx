@@ -1,42 +1,74 @@
 function Gallery() {
-  const images = [
+  const corporateImages = [
     "gallery1.jpeg",
-    "gallery2.jpeg",
     "gallery3.jpeg",
-    "gallery4.jpeg",
     "gallery5.jpeg",
     "gallery6.jpeg",
-    "gallery7.jpeg",
     "gallery8.jpeg",
     "gallery9.jpeg",
+  ];
+
+  const weddingImages = [
+    "gallery2.jpeg",
+    "gallery4.jpeg",
+    "gallery7.jpeg",
     "gallery10.jpeg",
   ];
 
   return (
     <section className="gallery" id="gallery">
+
+      {/* CORPORATE WORKS */}
       <div className="section-title">
-        <p className="section-label">OUR WORK</p>
+        <p className="section-label">OUR CORPORATE WORKS</p>
 
         <h2>
-          Events We've <span>Produced</span>
+          Corporate <span>Events</span>
         </h2>
 
         <p>
-          A look at some of the sound, lighting and production
-          setups by AUDIOSYNC.
+          Professional sound, lighting and production setups
+          for corporate events and celebrations.
         </p>
       </div>
 
       <div className="gallery-grid">
-        {images.map((image, index) => (
+        {corporateImages.map((image, index) => (
           <div className="gallery-item" key={image}>
             <img
               src={`/${image}`}
-              alt={`AUDIOSYNC event production ${index + 1}`}
+              alt={`AUDIOSYNC corporate event ${index + 1}`}
             />
           </div>
         ))}
       </div>
+
+
+      {/* WEDDING WORKS */}
+      <div className="section-title gallery-section-title">
+        <p className="section-label">OUR WEDDING WORKS</p>
+
+        <h2>
+          Wedding <span>Events</span>
+        </h2>
+
+        <p>
+          Beautiful sound, lighting and production setups
+          created for weddings and celebrations.
+        </p>
+      </div>
+
+      <div className="gallery-grid">
+        {weddingImages.map((image, index) => (
+          <div className="gallery-item" key={image}>
+            <img
+              src={`/${image}`}
+              alt={`AUDIOSYNC wedding event ${index + 1}`}
+            />
+          </div>
+        ))}
+      </div>
+
     </section>
   );
 }
